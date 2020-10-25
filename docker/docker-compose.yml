@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    image: juandeder/backend
+    restart: unless-stopped
+    command: flask run -h 0.0.0.0
+    depends_on:
+      - postgres
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: "/app/app:create_app()"
+    ports:
+      - "80:5000"
+    volumes:
+      - ..:/app
+    networks:
+      - net
+
+  postgres:
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:5432"
+    networks:
+      - net
+
+networks:
+  net:
